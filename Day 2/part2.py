@@ -1,6 +1,5 @@
 import os
 import string
-import operator
 
 strings = list()
 found = False
