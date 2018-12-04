@@ -60,3 +60,5 @@ for event in schedule:
 targetMinute = max(minutes.items(), key = operator.itemgetter(1))[0]
 
 print(targetMinute * int(target))
+
+#NOTE: Solution technically works, but for some reason several minutes were valid choices, and the last valid minute was correct. ¯\_(ツ)_/¯
