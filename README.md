@@ -1,4 +1,7 @@
 Advent of Code is an event run by Eric Wastl. For each day leading up to Christmas, programmers are tasked with solving two small problems each day.
+
+Solutions can be run by navigating to the corresponding *Day #* directory and running *python part\[1 or 2].py*
+
 https://adventofcode.com/2018/about
 
                                                                                                                                                                                                      
