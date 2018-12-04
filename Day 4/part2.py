@@ -20,7 +20,7 @@ startSleep = 0
 for event in schedule:
 	char = event[1][0]
 	if char == 'G':
-		guardNum = event[1][7:event[1].find('b')-1]
+		guardNum = int(event[1][7:event[1].find('b')-1])
 	elif char == 'f':
 		startSleep = event[0]
 	elif char == 'w':
@@ -34,4 +34,4 @@ for event in schedule:
 #get highest frequency of times slept by a guard on a particular minute
 guardMinute = max(guardMinuteSlept.items(), key = operator.itemgetter(1))[0]
 
-print(int(guardMinute[0]) * guardMinute[1])
+print(guardMinute[0] * guardMinute[1])
