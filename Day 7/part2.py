@@ -35,27 +35,18 @@ for n in nodes:
     n.execTime = 60 + i
     i += 1
 
-'''
-for n in nodes:
-    print('Tag ' + n.tag)
-    print('prerequisite ' + str(n.pre))
-    print('work time ' + str(n.execTime))
-'''
-
 workers = [None] * 5
 completed = set()
 t = -1
 
 while len(completed) < 26:
-    sys.stdout.write(str(t))
+    #work on tasks
     for w in range(len(workers)):
         if workers[w] is not None:
             workers[w].execTime -= 1
-            sys.stdout.write(workers[w].tag)
             if workers[w].execTime == 0:
                 completed.add(workers[w].tag)
                 workers[w] = None
-    sys.stdout.write('\n')
 
     #find ready nodes if workers available
     for w in range(len(workers)):
@@ -66,9 +57,7 @@ while len(completed) < 26:
                     del nodes[n]
                     break
 
-
     #time step
-
     t += 1
-
+    
 print(t)
