@@ -4,21 +4,30 @@ units = []
 grid = [] #0: wall, 1: empty space, also contains goblins, elves
 elf_num = 0
 gob_num = 0
+starting_elf_num = 0
 directions = [[-1,0],[0,-1],[0,1],[1,0]] #NWES
 
 class unit:
-	def __init__(self, x, y, faction):
+	def __init__(self, x, y, faction, ap):
 		self.hp = 200
-		self.ap = 3
+		self.ap = ap
 		self.x = x
 		self.y = y
 		self.faction = faction
 		self.is_dead = False
 
-def get_input(): 
+def get_input(elf_power): 
 	input = open('input.txt', 'r')
 	global elf_num
 	global gob_num
+	global starting_elf_num
+	global units
+	global grid
+	gob_num = 0
+	elf_num = 0
+	starting_elf_num = 0
+	units = []
+	grid = []
 	
 	y = 0
 	for row in input:
@@ -28,12 +37,13 @@ def get_input():
 			if c == '.':
 				new_row.append(1)
 			elif c == 'E':
-				new_unit = unit(x, y, 2)
+				new_unit = unit(x, y, 2, elf_power)
 				units.append(new_unit)
 				new_row.append(new_unit)
 				elf_num += 1
+				starting_elf_num += 1
 			elif c == 'G':
-				new_unit = unit(x, y, 3)
+				new_unit = unit(x, y, 3, 3)
 				units.append(new_unit)
 				new_row.append(new_unit)
 				gob_num += 1
@@ -42,6 +52,7 @@ def get_input():
 			x += 1
 		grid.append(new_row)
 		y += 1
+	input.close()
 
 def print_grid():
 	for row in grid:
@@ -121,8 +132,10 @@ def try_attack(u):
 			return True
 	return False
 
-def main():
-	get_input()
+def battle():
+	global starting_elf_num
+	global elf_num
+	global gob_num
 	fighting = True
 	turn = -1
 	
@@ -156,7 +169,24 @@ def main():
 	for u in units:
 		if u.hp > 0:
 			hp_total += u.hp
-	print(hp_total, turn)
-	print('Outcome:', hp_total * turn)
+	outcome = hp_total * turn
+	
+	if elf_num < starting_elf_num:
+		return (False, outcome)
+	else:
+		return (True, outcome)
+
+def main():
+	elf_power = 4
+	
+	while True:
+		get_input(elf_power)
+		outcome = battle()
+		if outcome[0]:
+			print('Successful with power level', elf_power)
+			print('Outcome:', outcome[1])
+			break
+		else:
+			elf_power += 1
 
 main()
