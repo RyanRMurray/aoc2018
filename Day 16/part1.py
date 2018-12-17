@@ -5,7 +5,7 @@ def get_input():
 	code = []
 	after = []
 	input = open('input1.txt','r').readlines()
-	
+
 	for line in input:
 		if len(line) > 1:
 			if line[0] == 'B':
@@ -16,7 +16,7 @@ def get_input():
 				after.append([int(x) for x in i.split(', ')])
 			else:
 				code.append([int(x) for x in line[:-1].split(' ')])
-	
+
 	return [before, code, after]
 
 def addr(before, a, b, c):
@@ -109,15 +109,15 @@ def main():
 	code = input[1]
 	after = input[2]
 	mt_three_possible = 0
-	
+
 	for s in range(len(before)):
 		compared = 0
 		for op in ops:
-			if after[s] == op(before[s].copy(), code[s][1], code[s][2], code[s][3]):
+			if after[s] == op(before[s][:], code[s][1], code[s][2], code[s][3]):
 				compared += 1
 		if compared > 2:
 			mt_three_possible += 1
-	
+
 	print(mt_three_possible)
 
 main()
