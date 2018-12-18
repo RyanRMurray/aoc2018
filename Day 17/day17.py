@@ -1,11 +1,16 @@
+import sys
+sys.setrecursionlimit(5000)
+
 grid = {}
 y_max = 0
+y_min = 999
 x_max = 0
 x_min = 999
 
 def get_input(f_path):
 	input = open(f_path, 'r')
 	global y_max
+	global y_min
 	global x_max
 	global x_min
 	global grid
@@ -19,6 +24,8 @@ def get_input(f_path):
 				grid[(x,y)] = 0
 			if y_e > y_max:
 				y_max = y_e
+			if y_s < y_min:
+				y_min = y_s
 			if x < x_min:
 				x_min = x
 			if x > x_max:
@@ -31,6 +38,8 @@ def get_input(f_path):
 				grid[(x,y)] = 0
 			if y > y_max:
 				y_max = y
+			if y < y_min:
+				y_min = y
 			if x_s < x_min:
 				x_min = x_s
 			if x_e > x_max:
@@ -38,38 +47,51 @@ def get_input(f_path):
 
 def print_grid():
 	output = open('out.txt', 'a')
-	for y in range(0, y_max):
+	for y in range(y_min - 1, y_max+5):
+#	for y in range(230, 250):
 		line = ''
 		for x in range(x_min-1, x_max+1):
+#		for x in range(445, 485):
 			if (x,y) in grid:
 				c = grid[(x,y)]
 				if c == 0:
 					line += '#'
 				elif c == 1:
 					line += '|'
-				else:
+				elif c == 2:
 					line += '~'
+				else:
+					line += 'x'
 			else:
 				line += '.'
+#		print(line)
 		output.write(line + '\n')
+	print()
 
 def find_opposite_wall(loc, dir):
-	below = (loc[0], loc[1] + 1)
 	next = (loc[0] + dir, loc[1])
-	if below not in grid:
+	ground = False
+	#check if there is valid ground that a wall can be connected to
+	for b in range(0,15):
+		if (loc[0],loc[1]+b) in grid:
+			ground = True
+			break
+	if not ground:
 		return False
+	#check if a wall is adjacent
 	if next in grid:
 		if grid[next] in [0,2]:
 			return True
 	else:
 		return find_opposite_wall(next, dir)
 
+
 def place_water(l):
+#	print_grid()
 	loc = (l[0],l[1])
 	left = (loc[0]-1,loc[1])
 	right = (loc[0]+1,loc[1])
 	below = (loc[0],loc[1]+1)
-	#falling water at loc
 	grid[loc] = 1
 	#check if at max depth
 	if l[1] > y_max:
@@ -95,11 +117,18 @@ def main():
 	get_input('input.txt')
 	place_water([500,1])
 	
+	flowing = 0
 	water = 0
 	for key, val in grid.items():
-		if val in [1,2]:
-			water += 1
-	print(water)
+		if key[1] >= y_min:
+			if val in [1,2]:
+				water += 1
+			if val == 1:
+				flowing += 1
+	print('total water: ', water)
+	print('total still water: ', water - flowing)
+	print(y_min)
 	print_grid()
+
 
 main()
